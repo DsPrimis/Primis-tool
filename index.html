@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Générateur de Logo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background: #f0f2f5;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    canvas {
+      margin-top: 20px;
+      border: 2px solid #ccc;
+      max-width: 100%;
+    }
+    .controls {
+      margin-top: 20px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    input, select, button {
+      padding: 8px;
+      font-size: 14px;
+    }
+    button {
+      background: #3498db;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    button:hover {
+      background: #2980b9;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>✨ Générateur de Logo ✨</h1>
+
+  <!-- Upload -->
+  <input type="file" id="upload" accept="image/*"><br>
+
+  <!-- Contrôles -->
+  <div class="controls">
+    <input type="text" id="texte" placeholder="Votre texte...">
+    <input type="color" id="couleur" value="#ffffff">
+    <input type="number" id="taille" value="60" min="20" max="150">
+    <select id="police">
+      <option value="Arial">Arial</option>
+      <option value="Verdana">Verdana</option>
+      <option value="Georgia">Georgia</option>
+      <option value="Courier New">Courier New</option>
+      <option value="Impact">Impact</option>
+    </select>
+    <select id="position">
+      <option value="bas">Bas</option>
+      <option value="milieu">Milieu</option>
+      <option value="haut">Haut</option>
+    </select>
+    <button onclick="ajouterTexte()">Appliquer</button>
+    <button onclick="telecharger()">Télécharger</button>
+  </div>
+
+  <!-- Canvas -->
+  <canvas id="canvas"></canvas>
+
+  <script>
+    let canvas = document.getElementById("canvas");
+    let ctx = canvas.getContext("2d");
+    let image = new Image();
+
+    // Charger une image
+    document.getElementById("upload").addEventListener("change", function(e) {
+      let fichier = e.target.files[0];
+      let reader = new FileReader();
+      reader.onload = function(event) {
+        image.onload = function() {
+          canvas.width = image.width;
+          canvas.height = image.height;
+          ctx.drawImage(image, 0, 0);
+        }
+        image.src = event.target.result;
+      }
+      reader.readAsDataURL(fichier);
+    });
+
+    // Ajouter du texte personnalisé
+    function ajouterTexte() {
+      let texte = document.getElementById("texte").value;
+      let couleur = document.getElementById("couleur").value;
+      let taille = document.getElementById("taille").value;
+      let police = document.getElementById("police").value;
+      let position = document.getElementById("position").value;
+
+      if (!texte) {
+        alert("Entrez un texte !");
+        return;
+      }
+
+      // Réafficher l'image
+      ctx.drawImage(image, 0, 0);
+
+      // Style du texte
+      ctx.font = `${taille}px ${police}`;
+      ctx.fillStyle = couleur;
+      ctx.strokeStyle = "black";
+      ctx.lineWidth = 3;
+      ctx.textAlign = "center";
+
+      let y;
+      if (position === "haut") y = 80;
+      else if (position === "milieu") y = canvas.height / 2;
+      else y = canvas.height - 50;
+
+      ctx.fillText(texte, canvas.width / 2, y);
+      ctx.strokeText(texte, canvas.width / 2, y);
+    }
+
+    // Télécharger en PNG
+    function telecharger() {
+      let lien = document.createElement("a");
+      lien.download = "logo.png";
+      lien.href = canvas.toDataURL("image/png");
+      lien.click();
+    }
+  </script>
+
+</body>
+</html> 
