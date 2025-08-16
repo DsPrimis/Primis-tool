@@ -4,6 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Générateur de Logo</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Poppins:wght@600&family=Lobster&family=Oswald:wght@500&display=swap" rel="stylesheet">
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -52,20 +56,47 @@
   <!-- Contrôles -->
   <div class="controls">
     <input type="text" id="texte" placeholder="Votre texte...">
+    
+    <!-- Choix libre de couleur -->
     <input type="color" id="couleur" value="#ffffff">
+
+    <!-- Palette rapide -->
+    <select id="presetColors" onchange="changerCouleur(this.value)">
+      <option value="">🎨 Couleurs rapides</option>
+      <option value="#ffffff">Blanc</option>
+      <option value="#000000">Noir</option>
+      <option value="#e74c3c">Rouge</option>
+      <option value="#3498db">Bleu</option>
+      <option value="#2ecc71">Vert</option>
+      <option value="#f1c40f">Jaune</option>
+      <option value="#9b59b6">Violet</option>
+      <option value="#ff7f50">Orange</option>
+    </select>
+
+    <!-- Taille -->
     <input type="number" id="taille" value="60" min="20" max="150">
+
+    <!-- Polices -->
     <select id="police">
       <option value="Arial">Arial</option>
       <option value="Verdana">Verdana</option>
       <option value="Georgia">Georgia</option>
       <option value="Courier New">Courier New</option>
       <option value="Impact">Impact</option>
+      <!-- Google Fonts -->
+      <option value="Roboto">Roboto</option>
+      <option value="Poppins">Poppins</option>
+      <option value="Lobster">Lobster</option>
+      <option value="Oswald">Oswald</option>
     </select>
+
+    <!-- Position -->
     <select id="position">
       <option value="bas">Bas</option>
       <option value="milieu">Milieu</option>
       <option value="haut">Haut</option>
     </select>
+
     <button onclick="ajouterTexte()">Appliquer</button>
     <button onclick="telecharger()">Télécharger</button>
   </div>
@@ -92,6 +123,13 @@
       }
       reader.readAsDataURL(fichier);
     });
+
+    // Changer couleur rapide
+    function changerCouleur(valeur) {
+      if (valeur) {
+        document.getElementById("couleur").value = valeur;
+      }
+    }
 
     // Ajouter du texte personnalisé
     function ajouterTexte() {
@@ -135,4 +173,4 @@
   </script>
 
 </body>
-</html> 
+</html>
