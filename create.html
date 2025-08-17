@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Créer un logo - Primis Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #f4f4f4;
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      margin-bottom: 20px;
+    }
+
+    label {
+      margin: 0 10px;
+    }
+
+    canvas {
+      margin-top: 20px;
+      border: 2px solid #333;
+      border-radius: 10px;
+      background: white;
+    }
+
+    .btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #ff5722;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #e64a19;
+    }
+
+    .back {
+      display: inline-block;
+      margin-top: 30px;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Créer un logo</h1>
+
+  <div class="controls">
+    <label>Texte :
+      <input type="text" id="logoText" placeholder="Entrez votre texte" />
+    </label>
+
+    <label>Couleur :
+      <input type="color" id="textColor" value="#ff5722" />
+    </label>
+
+    <label>Police :
+      <select id="fontSelect">
+        <option value="Arial">Arial</option>
+        <option value="Verdana">Verdana</option>
+        <option value="Georgia">Georgia</option>
+        <option value="Courier New">Courier New</option>
+        <option value="Impact">Impact</option>
+      </select>
+    </label>
+  </div>
+
+  <canvas id="logoCanvas" width="600" height="200"></canvas>
+
+  <br>
+  <button class="btn" onclick="downloadLogo()">Télécharger le logo</button>
+  <br>
+  <a href="index.html" class="back">⬅ Retour à l'accueil</a>
+
+  <script>
+    const canvas = document.getElementById("logoCanvas");
+    const ctx = canvas.getContext("2d");
+
+    const textInput = document.getElementById("logoText");
+    const colorInput = document.getElementById("textColor");
+    const fontSelect = document.getElementById("fontSelect");
+
+    function drawLogo() {
+      const text = textInput.value || "Primis";
+      const color = colorInput.value;
+      const font = fontSelect.value;
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = color;
+      ctx.font = `bold 60px ${font}`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText(text, canvas.width / 2, canvas.height / 2);
+    }
+
+    textInput.addEventListener("input", drawLogo);
+    colorInput.addEventListener("input", drawLogo);
+    fontSelect.addEventListener("change", drawLogo);
+
+    function downloadLogo() {
+      const link = document.createElement("a");
+      link.download = "logo.png";
+      link.href = canvas.toDataURL();
+      link.click();
+    }
+
+    // Dessine un logo par défaut au chargement
+    drawLogo();
+  </script>
+
+</body>
+  </html> 
