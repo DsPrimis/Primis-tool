@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Éditer un logo - Primis Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: #222;
+      color: white;
+      padding: 20px;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+    .btn {
+      padding: 10px 20px;
+      background: #ff5722;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      color: white;
+      transition: 0.3s;
+    }
+    .btn:hover {
+      background: #e64a19;
+      transform: scale(1.05);
+    }
+    #result {
+      margin-top: 30px;
+    }
+    img {
+      max-width: 100%;
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Éditer un Logo</h1>
+
+  <div class="buttons" id="styleButtons"></div>
+
+  <div id="result"></div>
+
+  <script>
+    // Liste des styles (identiques à server.js)
+    const styles = [
+      "candy","christmas","3dchristmas","sparklechristmas","deepsea","scifi",
+      "rainbow","waterpipe","spooky","pencil","circuit","discovery","metalic",
+      "fiction","demon","transformer","berry","thunder","magma","3dstone",
+      "neonlight","glitch","harrypotter","brokenglass","papercut","watercolor",
+      "multicolor","neondevil","underwater","graffitibike","snow","cloud","honey",
+      "ice","fruitjuice","biscuit","wood","chocolate","strawberry","matrix","blood",
+      "dropwater","toxic","lava","rock","bloodglas","hallowen","darkgold","joker",
+      "wicker","firework","skeleton","sand","glue","1917","leaves"
+    ];
+
+    // Générer les boutons automatiquement
+    const container = document.getElementById("styleButtons");
+    styles.forEach(style => {
+      const btn = document.createElement("button");
+      btn.className = "btn";
+      btn.innerText = style;
+      btn.onclick = () => generateLogo(style);
+      container.appendChild(btn);
+    });
+
+    async function generateLogo(style) {
+      const text = prompt(`Entrez le texte pour le style "${style}" :`);
+      if (!text) return;
+
+      const resultDiv = document.getElementById("result");
+      resultDiv.innerHTML = "<p>⏳ Génération du logo...</p>";
+
+      try {
+        const res = await fetch("http://localhost:3000/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ style, text })
+        });
+
+        const data = await res.json();
+        if (data.url) {
+          resultDiv.innerHTML = `
+            <p>✅ Logo généré avec style <b>${style}</b> :</p>
+            <img src="${data.url}" alt="Logo généré" />
+          `;
+        } else {
+          resultDiv.innerHTML = "<p>⚠️ Erreur lors de la génération</p>";
+        }
+      } catch (err) {
+        resultDiv.innerHTML = "<p>❌ Impossible de contacter le serveur</p>";
+      }
+    }
+  </script>
+</body>
+</html> 
