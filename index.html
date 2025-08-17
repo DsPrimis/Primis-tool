@@ -1,158 +1,57 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Générateur de Logo Fantaisie</title>
-<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&family=Poppins:wght@600&family=Lobster&family=Oswald:wght@500&display=swap" rel="stylesheet">
-<style>
-body { font-family: Arial, sans-serif; text-align: center; padding: 20px; background: #f0f2f5; }
-h1 { margin-bottom: 20px; }
-canvas { margin-top: 20px; border: 2px solid #ccc; max-width: 100%; }
-.controls { margin-top: 20px; display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
-input, select, button { padding: 8px; font-size: 14px; }
-button { background: #3498db; color: white; border: none; cursor: pointer; border-radius: 6px; }
-button:hover { background: #2980b9; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Primis Tool</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      background: linear-gradient(135deg, #1a1a1a, #333);
+      color: white;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    h1 {
+      font-size: 3rem;
+      margin-bottom: 40px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 15px 30px;
+      margin: 15px;
+      font-size: 1.2rem;
+      color: white;
+      background: #ff5722;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #e64a19;
+      transform: scale(1.05);
+    }
+  </style>
 </head>
 <body>
 
-<h1>✨ Générateur de Logo Fantaisie ✨</h1>
+  <h1>PRIMIS TOOL</h1>
 
-<input type="file" id="upload" accept="image/*"><br>
-
-<div class="controls">
-<input type="text" id="texte" placeholder="Votre texte...">
-<input type="color" id="couleur" value="#ffffff">
-
-<select id="presetColors" onchange="changerCouleur(this.value)">
-  <option value="">🎨 Couleurs rapides</option>
-  <option value="#ffffff">Blanc</option>
-  <option value="#000000">Noir</option>
-  <option value="#e74c3c">Rouge</option>
-  <option value="#3498db">Bleu</option>
-  <option value="#2ecc71">Vert</option>
-  <option value="#f1c40f">Jaune</option>
-  <option value="#9b59b6">Violet</option>
-  <option value="#ff7f50">Orange</option>
-</select>
-
-<input type="number" id="taille" value="60" min="20" max="150">
-
-<select id="police">
-  <option value="Arial">Arial</option>
-  <option value="Verdana">Verdana</option>
-  <option value="Georgia">Georgia</option>
-  <option value="Courier New">Courier New</option>
-  <option value="Impact">Impact</option>
-  <option value="Roboto">Roboto</option>
-  <option value="Poppins">Poppins</option>
-  <option value="Lobster">Lobster</option>
-  <option value="Oswald">Oswald</option>
-  <option value="AA1">AA Clavier 1</option>
-  <option value="AA2">AA Clavier 2</option>
-  <option value="AA3">AA Clavier 3</option>
-  <option value="AA4">AA Clavier 4</option>
-  <option value="AA5">AA Clavier 5</option>
-  <option value="AA6">AA Clavier 6</option>
-</select>
-
-<select id="position">
-  <option value="bas">Bas</option>
-  <option value="milieu">Milieu</option>
-  <option value="haut">Haut</option>
-</select>
-
-<button onclick="ajouterTexte()">Appliquer</button>
-<button onclick="telecharger()">Télécharger</button>
-</div>
-
-<canvas id="canvas"></canvas>
-
-<script>
-let canvas = document.getElementById("canvas");
-let ctx = canvas.getContext("2d");
-let image = new Image();
-
-// Upload de l'image
-document.getElementById("upload").addEventListener("change", function(e){
-  let fichier = e.target.files[0];
-  let reader = new FileReader();
-  reader.onload = function(event){
-    image.onload = function(){
-      canvas.width = image.width;
-      canvas.height = image.height;
-      ctx.drawImage(image,0,0);
-    }
-    image.src = event.target.result;
-  }
-  reader.readAsDataURL(fichier);
-});
-
-// Palette rapide
-function changerCouleur(valeur){ if(valeur) document.getElementById("couleur").value=valeur; }
-
-// Styles fancy / AA Clavier simplifiés
-const fancyStyles = {
-  "AA1": "𝔄𝔅ℂ𝔻𝔼𝔽𝔾ℍ𝕀𝕁𝕂𝕃𝕄ℕ𝕆ℙℚℝ𝕊𝕋𝕌𝕍𝕎𝕏𝕐ℤ",
-  "AA2": "𝗔𝗕𝗖𝗗𝗘𝗙𝗚𝗛𝗜𝗝𝗞𝗟𝗠𝗡𝗢𝗣𝗤𝗥𝗦𝗧𝗨𝗩𝗪𝗫𝗬𝗭",
-  "AA3": "𝘈𝘉𝘊𝘋𝘌𝘍𝘎𝘏𝘐𝘑𝘒𝘓𝘔𝘕𝘖𝘗𝘘𝘙𝘚𝘛𝘜𝘝𝘞𝘟𝘠𝘡",
-  "AA4": "ᴀʙᴄᴅᴇꜰɢʜɪᴊᴋʟᴍɴᴏᴘǫʀsᴛᴜᴠᴡxʏᴢ",
-  "AA5": "𝙰𝙱𝙲𝙳𝙴𝙵𝙶𝙷𝙸𝙹𝙺𝙻𝙼𝙽𝙾𝙿𝚀𝚁𝚂𝚃𝚄𝚅𝚆𝚇𝚈𝚉",
-  "AA6": "𝓐𝓑𝓒𝓓𝓔𝓕𝓖𝓗𝓘𝓙𝓚𝓛𝓜𝓝𝓞𝓟𝓠𝓡𝓢𝓣𝓤𝓥𝓦𝓧𝓨𝓩"
-};
-
-// Transformer texte pour AA Clavier
-function transformerTexte(text, style) {
-  if(!fancyStyles[style]) return text;
-  let lettres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  let result = "";
-  for(let i=0;i<text.length;i++){
-    let c = text[i];
-    let index = lettres.indexOf(c.toUpperCase());
-    if(index!==-1){
-      let newChar = fancyStyles[style][index];
-      if(c === c.toLowerCase()) newChar = newChar.toLowerCase();
-      result += newChar;
-    } else result += c;
-  }
-  return result;
-}
-
-// Ajouter texte sur l'image
-function ajouterTexte(){
-  if(!image.src) return alert("Veuillez uploader une image d'abord !");
-  ctx.clearRect(0,0,canvas.width,canvas.height);
-  ctx.drawImage(image,0,0);
-
-  let texte = document.getElementById("texte").value;
-  let couleur = document.getElementById("couleur").value;
-  let taille = parseInt(document.getElementById("taille").value);
-  let police = document.getElementById("police").value;
-  let position = document.getElementById("position").value;
-
-  // Appliquer style AA si nécessaire
-  if(police.startsWith("AA")) texte = transformerTexte(texte, police);
-
-  ctx.fillStyle = couleur;
-  ctx.textAlign = "center";
-  ctx.font = taille + "px " + (police.startsWith("AA") ? "Arial" : police);
-
-  let y = canvas.height / 2;
-  if(position==="haut") y = taille;
-  if(position==="bas") y = canvas.height - 20;
-
-  ctx.fillText(texte, canvas.width/2, y);
-}
-
-// Télécharger l'image
-function telecharger(){
-  let lien = document.createElement("a");
-  lien.download = "logo.png";
-  lien.href = canvas.toDataURL();
-  lien.click();
-}
-</script>
+  <a href="create.html" class="btn">Créer un logo</a>
+  <a href="edit.html" class="btn">Éditer un logo</a>
 
 </body>
 </html> 
